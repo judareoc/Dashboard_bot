@@ -60,9 +60,10 @@ export default function Conexion() {
   };
 
   // ❌ Desconectar
-  const disconnect = async (device) => {
-    await fetch(`http://localhost:8080/disconnect?device=${device}`);
-  };
+  const desconectar = async (device) => {
+  await fetch(`http://localhost:8080/disconnect?device=${device}`);
+  window.location.reload()
+};
 
   // 🔁 Auto refresh
   useEffect(() => {
