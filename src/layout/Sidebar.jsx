@@ -1,22 +1,44 @@
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
+import {
+  FaChartBar,
+  FaUsers,
+  FaClipboardList,
+  FaChartLine,
+  FaFilter,
+  FaFileAlt
+} from "react-icons/fa"
+
+import "./sidebar.css"
 
 function Sidebar() {
   return (
-    <div style={{
-      width: "220px",
-      background: "#1e293b",
-      color: "white",
-      padding: "20px"
-    }}>
-      <h2>Mi CRM</h2>
+    <div className="sidebar">
+      <h2 className="logo">Mi CRM</h2>
 
-      <nav style={{ marginTop: "20px" }}>
-        <p><Link to="/" style={{ color: "white" }}>Dashboard</Link></p>
-        <p><Link to="/usuarios" style={{ color: "white" }}>Clientes</Link></p>
-        <p><Link to="/estados" style={{ color: "white" }}>Estados</Link></p>
-        <p><Link to="/metricas" style={{ color: "white" }}>Métricas</Link></p>
-        <p><Link to="/embudo" style={{ color: "white" }}>Embudo</Link></p>
-        <p><Link to="/reportes" style={{ color: "white" }}>Reportes</Link></p>
+      <nav>
+        <NavLink to="/" className="link">
+          <FaChartBar /> <span>Panel</span>
+        </NavLink>
+
+        <NavLink to="/usuarios" className="link">
+          <FaUsers /> <span>Clientes</span>
+        </NavLink>
+
+        <NavLink to="/estados" className="link">
+          <FaClipboardList /> <span>Estados</span>
+        </NavLink>
+
+        <NavLink to="/metricas" className="link">
+          <FaChartLine /> <span>Métricas</span>
+        </NavLink>
+
+        <NavLink to="/embudo" className="link">
+          <FaFilter /> <span>Embudo</span>
+        </NavLink>
+
+        <NavLink to="/reportes" className="link">
+          <FaFileAlt /> <span>Informes</span>
+        </NavLink>
       </nav>
     </div>
   )
