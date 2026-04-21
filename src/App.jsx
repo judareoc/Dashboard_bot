@@ -8,6 +8,7 @@ import Metricas from "./pages/Metricas"
 import Embudo from "./pages/Embudo"
 import Reportes from "./pages/Reportes"
 import ClienteDetalle from "./pages/ClienteDetalle"
+import Conexion from "./pages/Conexion"
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/embudo" element={<Embudo />} />
           <Route path="/reportes" element={<Reportes />} />
           <Route path="/cliente/:id" element={<ClienteDetalle />} />
+          <Route path="/conexion" element={<Conexion />} />
         </Routes>
       </MainLayout>
     </BrowserRouter>

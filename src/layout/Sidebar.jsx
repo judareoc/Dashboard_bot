@@ -5,7 +5,8 @@ import {
   FaClipboardList,
   FaChartLine,
   FaFilter,
-  FaFileAlt
+  FaFileAlt,
+  FaQrcode
 } from "react-icons/fa"
 
 import "./sidebar.css"
@@ -38,6 +39,10 @@ function Sidebar() {
 
         <NavLink to="/reportes" className="link">
           <FaFileAlt /> <span>Informes</span>
+        </NavLink>
+
+        <NavLink to="/conexion" className="link">
+        <FaQrcode /> <span>Conexión</span>
         </NavLink>
       </nav>
     </div>

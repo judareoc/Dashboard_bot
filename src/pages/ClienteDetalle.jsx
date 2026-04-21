@@ -1,15 +1,12 @@
-import { useParams } from "react-router-dom"
 import { useState } from "react"
+import { crearCliente } from "../services/api"
 
 function ClienteDetalle() {
-  const { id } = useParams()
 
   const [form, setForm] = useState({
     nombre: "",
-    telefono: "",
-    universidad: "",
-    carrera: "",
-    estado: ""
+    cedula: "",
+    numero: ""
   })
 
   const handleChange = (e) => {
@@ -19,34 +16,20 @@ function ClienteDetalle() {
     })
   }
 
-  const guardar = () => {
-    console.log("Enviar al backend:", id, form)
+  const guardar = async () => {
+    await crearCliente(form)
+    alert("Cliente guardado")
   }
 
   return (
     <div>
-      <h2>Gestionar Cliente #{id}</h2>
+      <h2>Crear Cliente</h2>
 
-      <div className="card-pro">
+      <input name="nombre" placeholder="Nombre" onChange={handleChange} />
+      <input name="cedula" placeholder="Cédula" onChange={handleChange} />
+      <input name="numero" placeholder="Número" onChange={handleChange} />
 
-        <input name="nombre" placeholder="Nombre" onChange={handleChange} />
-        <input name="telefono" placeholder="Teléfono" onChange={handleChange} />
-        <input name="universidad" placeholder="Universidad" onChange={handleChange} />
-        <input name="carrera" placeholder="Carrera" onChange={handleChange} />
-
-        <select name="estado" onChange={handleChange}>
-          <option value="">Estado</option>
-          <option value="pendiente">Pendiente</option>
-          <option value="aprobado">Aprobado</option>
-        </select>
-
-        <br /><br />
-
-        <button onClick={guardar}>
-          Guardar
-        </button>
-
-      </div>
+      <button onClick={guardar}>Guardar</button>
     </div>
   )
 }
