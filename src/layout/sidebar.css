@@ -1,0 +1,27 @@
+.sidebar-pro {
+  width: 250px;
+  transition: all 0.3s ease;
+}
+
+.sidebar-link {
+  color: #cbd5e1 !important;
+  padding: 10px 15px;
+  border-radius: 10px;
+  margin: 4px 10px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+/* hover */
+.sidebar-link:hover {
+  background: #3c4b64;
+  color: #fff !important;
+}
+
+/* activo (NavLink lo aplica automáticamente) */
+.sidebar-link.active {
+  background: #4f46e5;
+  color: #fff !important;
+  box-shadow: 0 4px 10px rgba(79,70,229,0.4);
+}
