@@ -21,7 +21,9 @@ function App() {
           <Route path="/metricas" element={<Metricas />} />
           <Route path="/embudo" element={<Embudo />} />
           <Route path="/reportes" element={<Reportes />} />
-          <Route path="/cliente/:id" element={<ClienteDetalle />} />
+
+          <Route path="/cliente/:numero" element={<ClienteDetalle />} />
+
           <Route path="/conexion" element={<Conexion />} />
         </Routes>
       </MainLayout>
