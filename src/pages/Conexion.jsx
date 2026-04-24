@@ -17,7 +17,10 @@ export default function Conexion() {
       const res = await fetch(
         `http://localhost:8080/status?device=${device}`
       );
+
       const data = await res.json();
+
+      console.log("STATUS:", device, data);
 
       setStatus((prev) => ({
         ...prev,
@@ -61,9 +64,8 @@ export default function Conexion() {
 
   // ❌ Desconectar
   const desconectar = async (device) => {
-  await fetch(`http://localhost:8080/disconnect?device=${device}`);
-  window.location.reload()
-};
+    await fetch(`http://localhost:8080/disconnect?device=${device}`);
+  };
 
   // 🔁 Auto refresh
   useEffect(() => {
@@ -83,7 +85,10 @@ export default function Conexion() {
 
       <div className="cards">
         {devices.map((d) => {
-          const isConnected = status[d.id]?.Connected;
+
+          // 🔥 CORREGIDO: soporta ambos formatos
+          const isConnected =
+          status[d.id]?.Connected || status[d.id]?.connected;
 
           return (
             <div className="card" key={d.id}>
@@ -92,12 +97,14 @@ export default function Conexion() {
               <p>
                 Estado:
                 <span className={isConnected ? "ok" : "off"}>
-                  {isConnected ? " 🟢 Conectado" : " 🔴 Desconectado"}
+                  {isConnected
+                    ? " 🟢 Conectado"
+                    : " 🔴 Desconectado"}
                 </span>
               </p>
 
               <p className="phone">
-                📱 {status[d.id]?.Phone || "Sin número"}
+                📱 {status[d.id]?.Phone || status[d.id]?.phone || "Sin número"}
               </p>
 
               {/* QR */}
@@ -118,7 +125,7 @@ export default function Conexion() {
                 ) : (
                   <button
                     className="disconnect"
-                    onClick={() => disconnect(d.id)}
+                    onClick={() => desconectar(d.id)} // 🔥 CORREGIDO
                   >
                     Desconectar
                   </button>

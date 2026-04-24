@@ -1,107 +1,86 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
+import socket from "../services/socket";
 
-export default function Estados() {
-  const [clientes, setClientes] = useState([])
+const Estados = () => {
+  const [clientes, setClientes] = useState([]);
+
+  const getClientes = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/clientes_estado");
+
+      const data = await res.json();
+
+      console.log("🔥 DATA BACKEND:", data);
+
+      // 🔥 VALIDACIÓN CLAVE
+      if (Array.isArray(data)) {
+        setClientes(data);
+      } else {
+        console.error("❌ NO ES ARRAY:", data);
+        setClientes([]);
+      }
+
+    } catch (error) {
+      console.error("❌ ERROR FETCH:", error);
+      setClientes([]);
+    }
+  };
 
   useEffect(() => {
-    const ws = new WebSocket("ws://localhost:8080/ws")
+    getClientes();
 
-    ws.onopen = () => {
-      console.log("🟢 Conectado al WS")
-    }
+    // 🔥 WEBSOCKET
+    socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
 
-    ws.onmessage = (event) => {
-      const data = JSON.parse(event.data)
+      console.log("📩 WS:", data);
 
-      setClientes((prev) => {
-        const existe = prev.find(c => c.numero === data.numero)
+      setClientes((prev) =>
+        prev.map((c) =>
+          String(c.numero) === String(data.numero)
+            ? { ...c, estado: data.estado }
+            : c
+        )
+      );
+    };
 
-        if (existe) {
-          return prev.map(c =>
-            c.numero === data.numero ? { ...c, Estado: data.Estado } : c
-          )
-        }
-
-        return [...prev, data]
-      })
-    }
-
-    ws.onerror = (err) => console.error("❌ WS error:", err)
-    ws.onclose = () => console.log("🔴 WS cerrado")
-
-    return () => ws.close()
-  }, [])
+  }, []);
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>📡 Estados en tiempo real</h2>
+    <div className="container mt-4">
+      <h3>Estados en tiempo real</h3>
 
-      <div style={styles.table}>
-        {/* HEADER */}
-        <div style={styles.header}>
-          <span>Número</span>
-          <span>Nombre</span>
-          <span>Cédula</span>
-          <span>Universidad</span>
-          <span>Estado</span>
-        </div>
+      <table className="table table-striped mt-3">
+        <thead>
+          <tr>
+            <th>Número</th>
+            <th>Cédula</th>
+            <th>Nombre</th>
+            <th>Universidad</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
 
-        {/* FILAS */}
-        {clientes.map((c, i) => (
-          <div key={i} style={styles.row}>
-            <span>{c.numero}</span>
-            <span>{c.Nombre || "—"}</span>
-            <span>{c.Cedula || "—"}</span>
-            <span>{c.Universidad || "—"}</span>
-
-            <span style={{
-              fontWeight: "bold",
-              color:
-                c.Estado === "aprobado" ? "#16a34a" :
-                c.Estado === "rechazado" ? "#dc2626" :
-                "#f59e0b"
-            }}>
-              {c.Estado || "pendiente"}
-            </span>
-          </div>
-        ))}
-      </div>
+        <tbody>
+          {clientes.length === 0 ? (
+            <tr>
+              <td colSpan="5">No hay datos</td>
+            </tr>
+          ) : (
+            clientes.map((c, i) => (
+              <tr key={c.numero || i}>
+                <td>{c.numero}</td>
+                <td>{c.cedula || "SIN CÉDULA"}</td>
+                <td>{c.nombre || "SIN NOMBRE"}</td>
+                <td>{c.universidad || "SIN UNI"}</td>
+                <td>{c.estado || "sin estado"}</td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
     </div>
-  )
-}
+  );
+};
 
-const styles = {
-  container: {
-    padding: "30px",
-    background: "#f4f6f9",
-    minHeight: "100vh"
-  },
-
-  title: {
-    marginBottom: "20px"
-  },
-
-  table: {
-    background: "#fff",
-    borderRadius: "12px",
-    overflow: "hidden",
-    boxShadow: "0 4px 10px rgba(0,0,0,0.05)"
-  },
-
-  header: {
-    display: "grid",
-    gridTemplateColumns: "2fr 2fr 2fr 2fr 1fr",
-    background: "#111827",
-    color: "#fff",
-    padding: "15px",
-    fontWeight: "bold"
-  },
-
-  row: {
-    display: "grid",
-    gridTemplateColumns: "2fr 2fr 2fr 2fr 1fr",
-    padding: "15px",
-    borderBottom: "1px solid #eee",
-    alignItems: "center"
-  }
-}
+export default Estados;
